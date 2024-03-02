@@ -1,0 +1,58 @@
+{
+  "database": [
+    {
+      "name": "user",
+      "columns": [
+        {
+          "name": "id",
+          "type": "number"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "surname",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "unique": true
+        },
+        {
+          "name": "password",
+          "type": "string"
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "nullable": true
+        }
+      ],
+      "primary": "id",
+      "relations": [
+        {
+          "table": "room",
+          "relation": "N-M"
+        }
+      ]
+    },
+    {
+      "name": "room",
+      "columns": [
+        {
+          "name": "id",
+          "type": "number"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "length": 100
+        }
+      ],
+      "primary": "id"
+    }
+  ]
+}
