@@ -14,7 +14,7 @@ export class RoomService {
     private readonly userService: UserService,
   ) {}
 
-  async addFriend(createRoomDto: CreateRoomDto) {
+  async addFriend(createRoomDto: CreateRoomDto): Promise<UserRoom> {
     const request = this.userRoomRepository.create()
     const userR = await this.userService.findOne(createRoomDto.userReceiveId)
     const userS = await this.userService.findOne(createRoomDto.userSendId)
@@ -43,7 +43,7 @@ export class RoomService {
     return room
   }
 
-  async acceptFriend(id: number) {
+  async acceptFriend(id: number): Promise<UserRoom> {
     const requestFound = await this.userRoomRepository.findOne({
       where: {
         id,
@@ -59,7 +59,7 @@ export class RoomService {
     return this.userRoomRepository.save(requestFound)
   }
 
-  async cancel(id: number) {
+  async cancel(id: number): Promise<UserRoom> {
     const requestFound = await this.userRoomRepository.findOne({
       where: {
         id,
