@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from "@nestjs/common"
+import { Controller, Post, Body, Patch, Param, Get } from "@nestjs/common"
 import { RoomService } from "./room.service"
 import { CreateRoomDto } from "./dto/create-room.dto"
 
@@ -19,19 +11,18 @@ export class RoomController {
     return this.roomService.addFriend(createRoomDto)
   }
 
-  @Patch(":idR/:idS")
-  acceptFriend(
-    @Param("idR") userReceiveId: string,
-    @Param("idS") userSendId: string,
-  ) {
-    return this.roomService.acceptFriend(+userReceiveId, +userSendId)
+  @Get(":userRoomId")
+  findCommentsByRoom(@Param("userRoomId") userRoomId: string) {
+    return this.roomService.findCommentsByRoom(+userRoomId)
   }
 
-  @Patch("cancel/:idR/:idS")
-  cancel(
-    @Param("idR") userReceiveId: string,
-    @Param("idS") userSendId: string,
-  ) {
-    return this.roomService.cancel(+userReceiveId, +userSendId)
+  @Patch(":id")
+  acceptFriend(@Param("id") id: string) {
+    return this.roomService.acceptFriend(+id)
+  }
+
+  @Patch("cancel/:id")
+  cancel(@Param("id") id: string) {
+    return this.roomService.cancel(+id)
   }
 }

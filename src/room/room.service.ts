@@ -11,7 +11,7 @@ export class RoomService {
   constructor(
     @InjectRepository(UserRoom)
     private userRoomRepository: Repository<UserRoom>,
-    private userService: UserService,
+    private readonly userService: UserService,
   ) {}
 
   async addFriend(createRoomDto: CreateRoomDto) {
@@ -26,16 +26,32 @@ export class RoomService {
     return this.userRoomRepository.save(request)
   }
 
-  async acceptFriend(userReceiveId: number, userSendId: number) {
+  async findCommentsByRoom(id: number): Promise<UserRoom> {
+    const room = await this.userRoomRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        comments: true,
+      },
+    })
+
+    if (!room) {
+      throw new HttpException("Room not found", HttpStatus.NOT_FOUND)
+    }
+
+    return room
+  }
+
+  async acceptFriend(id: number) {
     const requestFound = await this.userRoomRepository.findOne({
       where: {
-        userReceiveId,
-        userSendId,
+        id,
       },
     })
 
     if (!requestFound) {
-      throw new HttpException("request not found", HttpStatus.NOT_FOUND)
+      throw new HttpException("Request not found", HttpStatus.NOT_FOUND)
     }
 
     requestFound.status = "accepted"
@@ -43,16 +59,15 @@ export class RoomService {
     return this.userRoomRepository.save(requestFound)
   }
 
-  async cancel(userReceiveId: number, userSendId: number) {
+  async cancel(id: number) {
     const requestFound = await this.userRoomRepository.findOne({
       where: {
-        userReceiveId,
-        userSendId,
+        id,
       },
     })
 
     if (!requestFound) {
-      throw new HttpException("request not found", HttpStatus.NOT_FOUND)
+      throw new HttpException("Request not found", HttpStatus.NOT_FOUND)
     }
 
     requestFound.status = "rejected"

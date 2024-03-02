@@ -3,7 +3,8 @@ import { ConfigModule } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 import { AuthModule } from "./auth/auth.module"
-import { RoomModule } from './room/room.module';
+import { RoomModule } from "./room/room.module"
+import { CommentModule } from "./comment/comment.module"
 
 @Module({
   imports: [
@@ -19,10 +20,12 @@ import { RoomModule } from './room/room.module';
       host: "db",
       entities: [__dirname + "/entities/*.entity{.tx,.js}"],
       synchronize: true,
+      dropSchema: true,
     }),
     UserModule,
     AuthModule,
     RoomModule,
+    CommentModule,
   ],
   controllers: [],
   providers: [],
