@@ -35,7 +35,8 @@ export class UserService {
         id,
       },
       relations: {
-        rooms: true,
+        roomR: true,
+        roomS: true,
       },
     })
 
@@ -50,9 +51,6 @@ export class UserService {
     const user = await this.userRepository.findOne({
       where: {
         email,
-      },
-      relations: {
-        rooms: true,
       },
     })
 

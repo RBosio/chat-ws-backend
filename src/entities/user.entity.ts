@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 
-import { Room } from "./room.entity"
+import { UserRoom } from "./userRoom.entity"
 
 @Entity()
 export class User {
@@ -22,6 +22,11 @@ export class User {
   @Column({ nullable: true })
   image: string
 
-  @ManyToMany(() => Room, (rooms) => rooms.users)
-  rooms: Room[]
+  @OneToMany(() => UserRoom, (userRoom) => userRoom.userSend)
+  roomS: UserRoom[]
+
+  @OneToMany(() => UserRoom, (userRoom) => userRoom.userReceive)
+  roomR: UserRoom[]
+
+  rooms: UserRoom[]
 }
