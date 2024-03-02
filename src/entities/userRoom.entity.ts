@@ -20,8 +20,8 @@ export class UserRoom {
   @Column({ type: "varchar", length: 100 })
   name: string
 
-  @Column({ default: false })
-  accepted: boolean
+  @Column({ default: "waiting" })
+  status: string
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: "userSendId" })
