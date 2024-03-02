@@ -3,7 +3,13 @@ import { AuthService } from "./auth.service"
 import { LoginUserDto } from "./dto/login-user.dto"
 import { CreateUserDto } from "src/user/dto/create-user.dto"
 import { AuthGuard } from "./auth.guard"
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger"
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger"
 import { User } from "src/entities/user.entity"
 
 @ApiTags("auth")
@@ -51,6 +57,7 @@ export class AuthController {
     status: 401,
     description: "unauthorized",
   })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   profile(@Req() req): User {
     return req.user

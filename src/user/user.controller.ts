@@ -1,10 +1,19 @@
-import { Controller, Get, Body, Patch, Param } from "@nestjs/common"
+import { Controller, Get, Body, Patch, Param, UseGuards } from "@nestjs/common"
 import { UserService } from "./user.service"
 import { UpdateUserDto } from "./dto/update-user.dto"
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger"
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger"
 import { User } from "src/entities/user.entity"
+import { AuthGuard } from "src/auth/auth.guard"
 
 @ApiTags("user")
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -15,6 +24,10 @@ export class UserController {
     status: 200,
     description: "get all users",
   })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
+  })
   findAll(): Promise<User[]> {
     return this.userService.findAll()
   }
@@ -24,6 +37,10 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: "get user",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
   })
   @ApiResponse({
     status: 404,
@@ -43,6 +60,10 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: "user updated",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
   })
   @ApiResponse({
     status: 404,

@@ -1,7 +1,16 @@
-import { Controller, Post, Body, Patch, Param, Get } from "@nestjs/common"
+import {
+  Controller,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Get,
+  UseGuards,
+} from "@nestjs/common"
 import { RoomService } from "./room.service"
 import { CreateRoomDto } from "./dto/create-room.dto"
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -9,8 +18,11 @@ import {
   ApiTags,
 } from "@nestjs/swagger"
 import { UserRoom } from "src/entities/userRoom.entity"
+import { AuthGuard } from "src/auth/auth.guard"
 
 @ApiTags("room")
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller("room")
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
@@ -22,6 +34,10 @@ export class RoomController {
   @ApiResponse({
     status: 201,
     description: "friend request send",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
   })
   @ApiResponse({
     status: 404,
@@ -37,6 +53,10 @@ export class RoomController {
   @ApiResponse({
     status: 200,
     description: "get all comments by room",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
   })
   @ApiResponse({
     status: 404,
@@ -58,6 +78,10 @@ export class RoomController {
     description: "friend request accepted",
   })
   @ApiResponse({
+    status: 401,
+    description: "unauthorized",
+  })
+  @ApiResponse({
     status: 404,
     description: "friend request not found",
   })
@@ -75,6 +99,10 @@ export class RoomController {
   @ApiResponse({
     status: 200,
     description: "friend request rejected",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
   })
   @ApiResponse({
     status: 404,

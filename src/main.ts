@@ -7,6 +7,7 @@ async function bootstrap() {
   const PORT = process.env.PORT || 3000
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle("ChatApp")
     .setDescription("Social application")
     .setVersion("1.0")
