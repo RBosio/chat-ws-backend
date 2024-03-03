@@ -8,6 +8,7 @@ import { join } from "path"
 import { ServeStaticModule } from "@nestjs/serve-static"
 import { MessageModule } from "./message/message.module"
 import { GroupModule } from "./group/group.module"
+import { WsModule } from './ws/ws.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { GroupModule } from "./group/group.module"
     FriendRequestModule,
     MessageModule,
     GroupModule,
+    WsModule,
   ],
   controllers: [],
   providers: [],
