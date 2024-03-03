@@ -21,6 +21,9 @@ export class User {
   @Column({ nullable: true })
   url: string
 
-  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest)
-  roomS: FriendRequest[]
+  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.userSend)
+  friendS: FriendRequest[]
+
+  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.userReceive)
+  friendR: FriendRequest[]
 }

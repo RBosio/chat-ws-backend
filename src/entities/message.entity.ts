@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 @Entity()
-export class Comment {
+export class Message {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
-  comment: string
+  message: string
 
   @Column()
   userSendId: number

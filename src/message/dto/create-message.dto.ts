@@ -1,16 +1,16 @@
 import { ApiProperty } from "@nestjs/swagger"
 
-export class CreateCommentDto {
+export class CreateMessageDto {
   @ApiProperty({
-    description: "comment",
+    description: "message",
     type: "string",
     required: true,
-    example: "a simple comment",
+    example: "a simple message",
   })
-  comment: string
+  message: string
 
   @ApiProperty({
-    description: "user id send comment",
+    description: "user id send message",
     type: "number",
     required: true,
     example: 1,
@@ -18,7 +18,7 @@ export class CreateCommentDto {
   userSendId: number
 
   @ApiProperty({
-    description: "user id send comment",
+    description: "user id send message",
     type: "number",
     required: true,
     example: 2,

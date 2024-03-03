@@ -4,9 +4,9 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 import { AuthModule } from "./auth/auth.module"
 import { FriendRequestModule } from "./friend/friend-request.module"
-import { CommentModule } from "./comment/comment.module"
 import { join } from "path"
 import { ServeStaticModule } from "@nestjs/serve-static"
+import { MessageModule } from "./message/message.module"
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { ServeStaticModule } from "@nestjs/serve-static"
     UserModule,
     AuthModule,
     FriendRequestModule,
-    CommentModule,
+    MessageModule,
   ],
   controllers: [],
   providers: [],

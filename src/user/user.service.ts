@@ -34,19 +34,11 @@ export class UserService {
       where: {
         id,
       },
-      relations: {
-        roomR: true,
-        roomS: true,
-      },
     })
 
     if (!user) {
       throw new HttpException("User not found", HttpStatus.NOT_FOUND)
     }
-
-    user.rooms = user.roomR.concat(user.roomS)
-    user.roomS = null
-    user.roomR = null
 
     return user
   }
