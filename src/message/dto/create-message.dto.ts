@@ -24,12 +24,4 @@ export class CreateMessageDto {
     example: 1,
   })
   userSendId: number
-
-  @ApiProperty({
-    description: "user id send message",
-    type: "number",
-    required: true,
-    example: 2,
-  })
-  userReceiveId: number
 }

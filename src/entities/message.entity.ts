@@ -18,7 +18,4 @@ export class Message {
 
   @ManyToOne(() => User, (userS) => userS.messagesS)
   userSend: User
-
-  @ManyToOne(() => User, (userR) => userR.messagesR)
-  userReceive: User
 }

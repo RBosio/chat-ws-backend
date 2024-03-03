@@ -39,9 +39,6 @@ export class User {
   @OneToMany(() => Message, (message) => message.userSend)
   messagesS: Message[]
 
-  @OneToMany(() => Message, (message) => message.userReceive)
-  messagesR: Message[]
-
   @ManyToMany(() => Group, (groups) => groups.users)
   @JoinTable()
   groups: Group[]
