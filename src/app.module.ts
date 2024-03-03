@@ -3,10 +3,11 @@ import { ConfigModule } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 import { AuthModule } from "./auth/auth.module"
-import { RoomModule } from "./room/room.module"
-import { CommentModule } from "./comment/comment.module"
+import { FriendRequestModule } from "./friend/friend-request.module"
 import { join } from "path"
 import { ServeStaticModule } from "@nestjs/serve-static"
+import { MessageModule } from "./message/message.module"
+import { GroupModule } from "./group/group.module"
 
 @Module({
   imports: [
@@ -25,12 +26,12 @@ import { ServeStaticModule } from "@nestjs/serve-static"
       host: "db",
       entities: [__dirname + "/entities/*.entity{.tx,.js}"],
       synchronize: true,
-      dropSchema: true,
     }),
     UserModule,
     AuthModule,
-    RoomModule,
-    CommentModule,
+    FriendRequestModule,
+    MessageModule,
+    GroupModule,
   ],
   controllers: [],
   providers: [],

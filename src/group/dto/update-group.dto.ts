@@ -1,11 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger"
 
-export class UpdateCommentDto {
+export class UpdateGroupDto {
   @ApiProperty({
-    description: "comment",
+    description: "group name",
     type: "string",
     required: true,
-    example: "a simple comment",
+    example: "Example new name",
   })
-  comment: string
+  name: string
 }

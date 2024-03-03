@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger"
 
-export class CreateRoomDto {
+export class AddFriendDto {
   @ApiProperty({
     description: "user id send friend request",
     type: "number",

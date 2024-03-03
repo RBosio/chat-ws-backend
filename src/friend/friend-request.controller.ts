@@ -7,8 +7,8 @@ import {
   Get,
   UseGuards,
 } from "@nestjs/common"
-import { RoomService } from "./room.service"
-import { CreateRoomDto } from "./dto/create-room.dto"
+import { FriendRequestService } from "./friend-request.service"
+import { AddFriendDto } from "./dto/add-friend.dto"
 import {
   ApiBearerAuth,
   ApiBody,
@@ -17,15 +17,15 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger"
-import { UserRoom } from "src/entities/userRoom.entity"
 import { AuthGuard } from "src/auth/auth.guard"
+import { FriendRequest } from "src/entities/friendRequest.entity"
 
-@ApiTags("room")
+@ApiTags("friendRequest")
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
-@Controller("room")
-export class RoomController {
-  constructor(private readonly roomService: RoomService) {}
+@Controller("friendRequest")
+export class FriendRequestController {
+  constructor(private readonly friendRequestService: FriendRequestService) {}
 
   @Post()
   @ApiOperation({
@@ -43,35 +43,31 @@ export class RoomController {
     status: 404,
     description: "user not found",
   })
-  @ApiBody({ type: CreateRoomDto })
-  addFriend(@Body() createRoomDto: CreateRoomDto): Promise<UserRoom> {
-    return this.roomService.addFriend(createRoomDto)
+  @ApiBody({ type: AddFriendDto })
+  addFriend(@Body() createRoomDto: AddFriendDto): Promise<FriendRequest> {
+    return this.friendRequestService.addFriend(createRoomDto)
   }
 
-  @Get(":roomId")
-  @ApiOperation({ summary: "find all comments by room" })
+  @Get(":userId")
+  @ApiOperation({ summary: "find friend requests" })
   @ApiResponse({
     status: 200,
-    description: "get all comments by room",
+    description: "get friend requests",
   })
   @ApiResponse({
     status: 401,
     description: "unauthorized",
   })
-  @ApiResponse({
-    status: 404,
-    description: "friend request not found",
-  })
   @ApiParam({
-    name: "roomId",
-    type: "string",
+    name: "userId",
+    type: "number",
     example: 1,
   })
-  findCommentsByRoom(@Param("roomId") roomId: string): Promise<UserRoom> {
-    return this.roomService.findCommentsByRoom(+roomId)
+  getFriendRequests(@Param("userId") userId: string): Promise<FriendRequest[]> {
+    return this.friendRequestService.getFriendRequests(+userId)
   }
 
-  @Patch(":roomId")
+  @Patch(":friendRequestId")
   @ApiOperation({ summary: "accept friend request" })
   @ApiResponse({
     status: 200,
@@ -86,15 +82,17 @@ export class RoomController {
     description: "friend request not found",
   })
   @ApiParam({
-    name: "roomId",
-    type: "string",
+    name: "friendRequestId",
+    type: "number",
     example: 1,
   })
-  acceptFriend(@Param("roomId") roomId: string): Promise<UserRoom> {
-    return this.roomService.acceptFriend(+roomId)
+  acceptFriend(
+    @Param("friendRequestId") friendRequestId: string,
+  ): Promise<FriendRequest> {
+    return this.friendRequestService.acceptFriend(+friendRequestId)
   }
 
-  @Patch("cancel/:roomId")
+  @Patch("cancel/:friendRequestId")
   @ApiOperation({ summary: "reject friend request" })
   @ApiResponse({
     status: 200,
@@ -109,11 +107,13 @@ export class RoomController {
     description: "friend request not found",
   })
   @ApiParam({
-    name: "roomId",
-    type: "string",
+    name: "friendRequestId",
+    type: "number",
     example: 1,
   })
-  cancel(@Param("roomId") roomId: string): Promise<UserRoom> {
-    return this.roomService.cancel(+roomId)
+  rejectFriend(
+    @Param("friendRequestId") friendRequestId: string,
+  ): Promise<FriendRequest> {
+    return this.friendRequestService.rejectFriend(+friendRequestId)
   }
 }

@@ -1,6 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
-
-import { UserRoom } from "./userRoom.entity"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from "typeorm"
+import { FriendRequest } from "./friendRequest.entity"
+import { Group } from "./group.entity"
+import { Message } from "./message.entity"
 
 @Entity()
 export class User {
@@ -22,11 +30,19 @@ export class User {
   @Column({ nullable: true })
   url: string
 
-  @OneToMany(() => UserRoom, (userRoom) => userRoom.userSend)
-  roomS: UserRoom[]
+  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.userSend)
+  friendS: FriendRequest[]
 
-  @OneToMany(() => UserRoom, (userRoom) => userRoom.userReceive)
-  roomR: UserRoom[]
+  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest.userReceive)
+  friendR: FriendRequest[]
 
-  rooms: UserRoom[]
+  @OneToMany(() => Message, (message) => message.userSend)
+  messagesS: Message[]
+
+  @OneToMany(() => Message, (message) => message.userReceive)
+  messagesR: Message[]
+
+  @ManyToMany(() => Group, (groups) => groups.users)
+  @JoinTable()
+  groups: Group[]
 }
