@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
-
-import { UserRoom } from "./userRoom.entity"
+import { FriendRequest } from "./friendRequest.entity"
 
 @Entity()
 export class User {
@@ -22,11 +21,6 @@ export class User {
   @Column({ nullable: true })
   url: string
 
-  @OneToMany(() => UserRoom, (userRoom) => userRoom.userSend)
-  roomS: UserRoom[]
-
-  @OneToMany(() => UserRoom, (userRoom) => userRoom.userReceive)
-  roomR: UserRoom[]
-
-  rooms: UserRoom[]
+  @OneToMany(() => FriendRequest, (friendRequest) => friendRequest)
+  roomS: FriendRequest[]
 }

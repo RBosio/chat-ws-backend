@@ -3,7 +3,7 @@ import { ConfigModule } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
 import { AuthModule } from "./auth/auth.module"
-import { RoomModule } from "./room/room.module"
+import { FriendRequestModule } from "./friend/friend-request.module"
 import { CommentModule } from "./comment/comment.module"
 import { join } from "path"
 import { ServeStaticModule } from "@nestjs/serve-static"
@@ -29,7 +29,7 @@ import { ServeStaticModule } from "@nestjs/serve-static"
     }),
     UserModule,
     AuthModule,
-    RoomModule,
+    FriendRequestModule,
     CommentModule,
   ],
   controllers: [],

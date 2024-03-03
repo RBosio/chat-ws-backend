@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { UserRoom } from "./userRoom.entity"
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 @Entity()
 export class Comment {
@@ -14,7 +13,4 @@ export class Comment {
 
   @Column()
   userReceiveId: number
-
-  @ManyToOne(() => UserRoom, (userR) => userR.comments)
-  userRoom: UserRoom
 }
