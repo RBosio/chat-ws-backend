@@ -5,12 +5,14 @@ import { Repository } from "typeorm"
 import { CreateMessageDto } from "./dto/create-message.dto"
 import { UpdateMessageDto } from "./dto/update-message.dto"
 import { GroupService } from "src/group/group.service"
+import { UserService } from "src/user/user.service"
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     private groupService: GroupService,
+    private userService: UserService,
   ) {}
 
   async create(createMessageDto: CreateMessageDto): Promise<Message> {
@@ -21,11 +23,25 @@ export class MessageService {
     )
     message.group = groupFounded
 
+    const userFounded = await this.userService.findOne(
+      createMessageDto.userSendId,
+    )
+    message.userSend = userFounded
+
     return this.messageRepository.save(message)
   }
 
-  async findAll(): Promise<Message[]> {
-    return this.messageRepository.find()
+  async findAllFromGroup(id: number): Promise<Message[]> {
+    return this.messageRepository.find({
+      where: {
+        group: {
+          id,
+        },
+      },
+      relations: {
+        userSend: true,
+      },
+    })
   }
 
   async update(

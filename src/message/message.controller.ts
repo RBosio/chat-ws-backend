@@ -43,18 +43,23 @@ export class MessageController {
     return this.messageService.create(createMessageDto)
   }
 
-  @Get()
-  @ApiOperation({ summary: "get all messages" })
+  @Get(":groupId")
+  @ApiOperation({ summary: "find all messages from group" })
   @ApiResponse({
     status: 200,
-    description: "get all messages",
+    description: "get all messages from group",
   })
   @ApiResponse({
     status: 401,
     description: "unauthorized",
   })
-  findAll(): Promise<Message[]> {
-    return this.messageService.findAll()
+  @ApiParam({
+    name: "groupId",
+    type: "number",
+    example: 1,
+  })
+  findAllFromGroup(@Param("groupId") groupId: string): Promise<Message[]> {
+    return this.messageService.findAllFromGroup(+groupId)
   }
 
   @Patch(":messageId")
