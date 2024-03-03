@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { User } from "./user.entity"
+import { Group } from "./group.entity"
 
 @Entity()
 export class Message {
@@ -8,9 +10,12 @@ export class Message {
   @Column()
   message: string
 
-  @Column()
-  userSendId: number
+  @ManyToOne(() => Group, (group) => group.messages)
+  group: Group
 
-  @Column()
-  userReceiveId: number
+  @ManyToOne(() => User, (userS) => userS.messagesS)
+  userSend: User
+
+  @ManyToOne(() => User, (userR) => userR.messagesR)
+  userReceive: User
 }
