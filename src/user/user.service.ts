@@ -76,4 +76,13 @@ export class UserService {
 
     return this.userRepository.save(userUpdated)
   }
+
+  async uploadFile(id: number, url: string): Promise<string> {
+    const userFound = await this.findOne(id)
+
+    userFound.url = url
+
+    await this.userRepository.save(userFound)
+    return "image uploaded!"
+  }
 }

@@ -20,7 +20,7 @@ export class User {
   password: string
 
   @Column({ nullable: true })
-  image: string
+  url: string
 
   @OneToMany(() => UserRoom, (userRoom) => userRoom.userSend)
   roomS: UserRoom[]

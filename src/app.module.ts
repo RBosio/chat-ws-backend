@@ -5,9 +5,14 @@ import { UserModule } from "./user/user.module"
 import { AuthModule } from "./auth/auth.module"
 import { RoomModule } from "./room/room.module"
 import { CommentModule } from "./comment/comment.module"
+import { join } from "path"
+import { ServeStaticModule } from "@nestjs/serve-static"
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "public"),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
