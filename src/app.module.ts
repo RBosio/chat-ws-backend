@@ -7,6 +7,7 @@ import { FriendRequestModule } from "./friend/friend-request.module"
 import { join } from "path"
 import { ServeStaticModule } from "@nestjs/serve-static"
 import { MessageModule } from "./message/message.module"
+import { GroupModule } from "./group/group.module"
 
 @Module({
   imports: [
@@ -25,12 +26,12 @@ import { MessageModule } from "./message/message.module"
       host: "db",
       entities: [__dirname + "/entities/*.entity{.tx,.js}"],
       synchronize: true,
-      dropSchema: true,
     }),
     UserModule,
     AuthModule,
     FriendRequestModule,
     MessageModule,
+    GroupModule,
   ],
   controllers: [],
   providers: [],

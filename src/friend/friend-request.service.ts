@@ -2,9 +2,9 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import { AddFriendDto } from "./dto/add-friend.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import { v4 as uuidv4 } from "uuid"
 import { UserService } from "src/user/user.service"
 import { FriendRequest } from "src/entities/friendRequest.entity"
+import { GroupService } from "src/group/group.service"
 
 @Injectable()
 export class FriendRequestService {
@@ -12,6 +12,7 @@ export class FriendRequestService {
     @InjectRepository(FriendRequest)
     private friendRequestRepository: Repository<FriendRequest>,
     private readonly userService: UserService,
+    private readonly groupService: GroupService,
   ) {}
 
   async addFriend(createRoomDto: AddFriendDto): Promise<FriendRequest> {
@@ -24,23 +25,6 @@ export class FriendRequestService {
 
     return this.friendRequestRepository.save(request)
   }
-
-  /* async findCommentsByGroup(id: number): Promise<FriendRequest> {
-    const friend = await this.friendRequestRepository.findOne({
-      where: {
-        id,
-      },
-      relations: {
-        comments: true,
-      },
-    })
-
-    if (!friend) {
-      throw new HttpException("Friend request not found", HttpStatus.NOT_FOUND)
-    }
-
-    return friend
-  } */
 
   async getFriendRequests(id: number): Promise<FriendRequest[]> {
     const requestsFound = await this.friendRequestRepository.find({
@@ -67,6 +51,10 @@ export class FriendRequestService {
       where: {
         id,
       },
+      relations: {
+        userSend: true,
+        userReceive: true,
+      },
     })
 
     if (!requestFound) {
@@ -74,6 +62,12 @@ export class FriendRequestService {
     }
 
     requestFound.status = "accepted"
+    const groupCreated = await this.groupService.create({ name: "" })
+    console.log(groupCreated)
+    console.log(requestFound.userSend)
+    console.log(requestFound.userReceive)
+    await this.groupService.addUser(groupCreated.id, requestFound.userSend)
+    await this.groupService.addUser(groupCreated.id, requestFound.userReceive)
 
     return this.friendRequestRepository.save(requestFound)
   }

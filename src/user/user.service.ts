@@ -34,6 +34,11 @@ export class UserService {
       where: {
         id,
       },
+      relations: {
+        groups: {
+          users: true,
+        },
+      },
     })
 
     if (!user) {

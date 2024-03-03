@@ -65,7 +65,7 @@ export class UserController {
   })
   @ApiParam({
     name: "userId",
-    type: "string",
+    type: "number",
     example: 1,
   })
   findOne(@Param("userId") userId: string): Promise<User> {
@@ -88,7 +88,7 @@ export class UserController {
   })
   @ApiParam({
     name: "userId",
-    type: "string",
+    type: "number",
     example: 1,
   })
   update(
@@ -127,6 +127,11 @@ export class UserController {
   @ApiBody({
     description: "user image",
     type: FileUploadDto,
+  })
+  @ApiParam({
+    name: "userId",
+    type: "number",
+    example: 1,
   })
   uploadFile(@Req() req: Request, @Param("userId") userId: string) {
     const { url } = req.body

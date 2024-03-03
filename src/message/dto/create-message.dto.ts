@@ -10,6 +10,14 @@ export class CreateMessageDto {
   message: string
 
   @ApiProperty({
+    description: "group id send message",
+    type: "number",
+    required: true,
+    example: 1,
+  })
+  groupId: number
+
+  @ApiProperty({
     description: "user id send message",
     type: "number",
     required: true,

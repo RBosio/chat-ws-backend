@@ -4,15 +4,22 @@ import { Message } from "src/entities/message.entity"
 import { Repository } from "typeorm"
 import { CreateMessageDto } from "./dto/create-message.dto"
 import { UpdateMessageDto } from "./dto/update-message.dto"
+import { GroupService } from "src/group/group.service"
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectRepository(Message) private messageRepository: Repository<Message>,
+    private groupService: GroupService,
   ) {}
 
   async create(createMessageDto: CreateMessageDto): Promise<Message> {
     const message = this.messageRepository.create(createMessageDto)
+
+    const groupFounded = await this.groupService.findOne(
+      createMessageDto.groupId,
+    )
+    message.group = groupFounded
 
     return this.messageRepository.save(message)
   }

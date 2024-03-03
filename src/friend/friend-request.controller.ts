@@ -20,10 +20,10 @@ import {
 import { AuthGuard } from "src/auth/auth.guard"
 import { FriendRequest } from "src/entities/friendRequest.entity"
 
-@ApiTags("friend")
+@ApiTags("friendRequest")
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
-@Controller("friend")
+@Controller("friendRequest")
 export class FriendRequestController {
   constructor(private readonly friendRequestService: FriendRequestService) {}
 
@@ -48,32 +48,7 @@ export class FriendRequestController {
     return this.friendRequestService.addFriend(createRoomDto)
   }
 
-  /* @Get(":friendId")
-  @ApiOperation({ summary: "find all comments by friend" })
-  @ApiResponse({
-    status: 200,
-    description: "get all comments by friend",
-  })
-  @ApiResponse({
-    status: 401,
-    description: "unauthorized",
-  })
-  @ApiResponse({
-    status: 404,
-    description: "friend request not found",
-  })
-  @ApiParam({
-    name: "friendId",
-    type: "string",
-    example: 1,
-  })
-  findCommentsByRoom(
-    @Param("friendId") friendId: string,
-  ): Promise<FriendRequest> {
-    return this.friendRequestService.findCommentsByRoom(+friendId)
-  } */
-
-  @Patch(":userId")
+  @Get(":userId")
   @ApiOperation({ summary: "find friend requests" })
   @ApiResponse({
     status: 200,
@@ -92,7 +67,7 @@ export class FriendRequestController {
     return this.friendRequestService.getFriendRequests(+userId)
   }
 
-  @Patch(":friendId")
+  @Patch(":friendRequestId")
   @ApiOperation({ summary: "accept friend request" })
   @ApiResponse({
     status: 200,
@@ -107,15 +82,17 @@ export class FriendRequestController {
     description: "friend request not found",
   })
   @ApiParam({
-    name: "friendId",
-    type: "string",
+    name: "friendRequestId",
+    type: "number",
     example: 1,
   })
-  acceptFriend(@Param("friendId") friendId: string): Promise<FriendRequest> {
-    return this.friendRequestService.acceptFriend(+friendId)
+  acceptFriend(
+    @Param("friendRequestId") friendRequestId: string,
+  ): Promise<FriendRequest> {
+    return this.friendRequestService.acceptFriend(+friendRequestId)
   }
 
-  @Patch("cancel/:friendId")
+  @Patch("cancel/:friendRequestId")
   @ApiOperation({ summary: "reject friend request" })
   @ApiResponse({
     status: 200,
@@ -130,11 +107,13 @@ export class FriendRequestController {
     description: "friend request not found",
   })
   @ApiParam({
-    name: "friendId",
-    type: "string",
+    name: "friendRequestId",
+    type: "number",
     example: 1,
   })
-  rejectFriend(@Param("friendId") friendId: string): Promise<FriendRequest> {
-    return this.friendRequestService.rejectFriend(+friendId)
+  rejectFriend(
+    @Param("friendRequestId") friendRequestId: string,
+  ): Promise<FriendRequest> {
+    return this.friendRequestService.rejectFriend(+friendRequestId)
   }
 }

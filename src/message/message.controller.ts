@@ -11,6 +11,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger"
@@ -56,7 +57,7 @@ export class MessageController {
     return this.messageService.findAll()
   }
 
-  @Patch(":id")
+  @Patch(":messageId")
   @ApiOperation({ summary: "edit message" })
   @ApiResponse({
     status: 200,
@@ -70,10 +71,15 @@ export class MessageController {
     status: 404,
     description: "message not found",
   })
+  @ApiParam({
+    name: "messageId",
+    type: "number",
+    example: 1,
+  })
   update(
-    @Param("id") id: string,
+    @Param("messageId") messageId: string,
     @Body() updateMessageDto: UpdateMessageDto,
   ): Promise<Message> {
-    return this.messageService.update(+id, updateMessageDto)
+    return this.messageService.update(+messageId, updateMessageDto)
   }
 }

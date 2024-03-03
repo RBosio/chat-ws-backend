@@ -16,6 +16,9 @@ export class Group {
   @Column()
   name: string
 
+  @Column({ default: true })
+  status: boolean
+
   @OneToMany(() => Message, (messages) => messages.group)
   messages: Message[]
 

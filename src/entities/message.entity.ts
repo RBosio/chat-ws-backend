@@ -10,6 +10,9 @@ export class Message {
   @Column()
   message: string
 
+  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  created_at: Date
+
   @ManyToOne(() => Group, (group) => group.messages)
   group: Group
 
