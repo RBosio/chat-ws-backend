@@ -55,7 +55,9 @@ export class GroupService {
         status: true,
       },
       relations: {
-        messages: true,
+        messages: {
+          userSend: true,
+        },
         users: true,
       },
     })
