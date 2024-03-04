@@ -6,6 +6,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const PORT = process.env.PORT || 3000
 
+  app.enableCors({
+    credentials: true,
+    origin: true,
+  })
+
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle("ChatApp")
