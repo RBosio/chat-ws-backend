@@ -5,6 +5,7 @@ import { JwtService } from "@nestjs/jwt"
 import { CreateUserDto } from "src/user/dto/create-user.dto"
 import { compare } from "bcryptjs"
 import { User } from "src/entities/user.entity"
+import { Response } from "express"
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
     return await this.userService.create(createUserDto)
   }
 
-  async login(loginUserDto: LoginUserDto): Promise<any> {
+  async login(loginUserDto: LoginUserDto, res: Response): Promise<any> {
     const user = await this.userService.findOneByEmail(loginUserDto.email)
 
     if (!user) {
@@ -29,9 +30,23 @@ export class AuthService {
     }
 
     const payload = { sub: user.id }
+    const token = await this.jwtService.signAsync(payload)
 
-    return {
-      token: await this.jwtService.signAsync(payload),
-    }
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
+      })
+      .send({ status: "ok" })
+  }
+
+  async logout(res: Response) {
+    res.clearCookie("token")
+
+    return res.status(200).json({
+      message: "Cierre de sesion exitoso",
+    })
   }
 }

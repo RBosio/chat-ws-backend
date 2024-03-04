@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from "@nestjs/common"
 import { AuthService } from "./auth.service"
 import { LoginUserDto } from "./dto/login-user.dto"
 import { CreateUserDto } from "src/user/dto/create-user.dto"
@@ -11,6 +19,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger"
 import { User } from "src/entities/user.entity"
+import { Response } from "express"
 
 @ApiTags("auth")
 @Controller("auth")
@@ -43,8 +52,27 @@ export class AuthController {
     description: "unauthorized",
   })
   @ApiBody({ type: LoginUserDto })
-  login(@Body() loginUserDto: LoginUserDto): Promise<any> {
-    return this.authService.login(loginUserDto)
+  login(
+    @Body() loginUserDto: LoginUserDto,
+    @Res() res: Response,
+  ): Promise<any> {
+    return this.authService.login(loginUserDto, res)
+  }
+
+  @Post("logout")
+  @ApiOperation({ summary: "logout" })
+  @ApiResponse({
+    status: 200,
+    description: "logout",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
+  })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  async logout(@Res() res: Response) {
+    return this.authService.logout(res)
   }
 
   @Get("profile")
