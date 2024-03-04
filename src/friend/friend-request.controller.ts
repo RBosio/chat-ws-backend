@@ -48,11 +48,11 @@ export class FriendRequestController {
     return this.friendRequestService.addFriend(createRoomDto)
   }
 
-  @Get(":userId")
-  @ApiOperation({ summary: "find friend requests" })
+  @Get("waiting/:userId")
+  @ApiOperation({ summary: "find friend requests waiting" })
   @ApiResponse({
     status: 200,
-    description: "get friend requests",
+    description: "get friend requests waiting",
   })
   @ApiResponse({
     status: 401,
@@ -65,6 +65,25 @@ export class FriendRequestController {
   })
   getFriendRequests(@Param("userId") userId: string): Promise<FriendRequest[]> {
     return this.friendRequestService.getFriendRequests(+userId)
+  }
+
+  @Get("accepted/:userId")
+  @ApiOperation({ summary: "find friend requests accepted" })
+  @ApiResponse({
+    status: 200,
+    description: "get friend requests accepted",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
+  })
+  @ApiParam({
+    name: "userId",
+    type: "number",
+    example: 1,
+  })
+  getFriendRequestsAccepted(@Param("userId") userId: string) {
+    return this.friendRequestService.getFriendRequestsAccepted(+userId)
   }
 
   @Patch(":friendRequestId")

@@ -31,6 +31,25 @@ export class FriendRequestService {
     const requestsFound = await this.friendRequestRepository.find({
       where: [
         {
+          userReceive: {
+            id,
+          },
+        },
+      ],
+      relations: {
+        userSend: true,
+        userReceive: true,
+      },
+    })
+
+    const requests = requestsFound.filter((r) => r.status === "waiting")
+    return requests
+  }
+
+  async getFriendRequestsAccepted(id: number): Promise<FriendRequest[]> {
+    const requestsFound = await this.friendRequestRepository.find({
+      where: [
+        {
           userSend: {
             id,
           },
@@ -41,9 +60,13 @@ export class FriendRequestService {
           },
         },
       ],
+      relations: {
+        userSend: true,
+        userReceive: true,
+      },
     })
 
-    const requests = requestsFound.filter((r) => r.status === "waiting")
+    const requests = requestsFound.filter((r) => r.status === "accepted")
     return requests
   }
 
