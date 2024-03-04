@@ -28,11 +28,30 @@ export class GroupService {
 
     return this.groupRepository.save(groupFounded)
   }
-  
+
   async findOne(id: number): Promise<Group> {
     const groupFounded = await this.groupRepository.findOne({
       where: {
         id,
+        status: true,
+      },
+      relations: {
+        messages: true,
+        users: true,
+      },
+    })
+
+    if (!groupFounded) {
+      throw new HttpException("Group not found", HttpStatus.NOT_FOUND)
+    }
+
+    return groupFounded
+  }
+
+  async findOneByName(name: string): Promise<Group> {
+    const groupFounded = await this.groupRepository.findOne({
+      where: {
+        name,
         status: true,
       },
       relations: {

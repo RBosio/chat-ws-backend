@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Get,
 } from "@nestjs/common"
 import { GroupService } from "./group.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
@@ -14,6 +15,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger"
@@ -40,6 +42,25 @@ export class GroupController {
   @ApiBody({ type: CreateGroupDto })
   create(@Body() createGroupDto: CreateGroupDto) {
     return this.groupService.create(createGroupDto)
+  }
+
+  @Get(":groupName")
+  @ApiOperation({ summary: "find group" })
+  @ApiResponse({
+    status: 200,
+    description: "get group",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
+  })
+  @ApiParam({
+    name: "groupName",
+    required: true,
+    example: "f0ac0c7c-dc24-47d9-b5bd-dbd11d043928",
+  })
+  findOneByName(@Param("groupName") groupName: string) {
+    return this.groupService.findOneByName(groupName)
   }
 
   @Patch(":groupId/users")

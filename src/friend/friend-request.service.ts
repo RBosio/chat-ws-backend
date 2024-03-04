@@ -5,6 +5,7 @@ import { Repository } from "typeorm"
 import { UserService } from "src/user/user.service"
 import { FriendRequest } from "src/entities/friendRequest.entity"
 import { GroupService } from "src/group/group.service"
+import { v4 as uuidv4 } from "uuid"
 
 @Injectable()
 export class FriendRequestService {
@@ -62,10 +63,7 @@ export class FriendRequestService {
     }
 
     requestFound.status = "accepted"
-    const groupCreated = await this.groupService.create({ name: "" })
-    console.log(groupCreated)
-    console.log(requestFound.userSend)
-    console.log(requestFound.userReceive)
+    const groupCreated = await this.groupService.create({ name: uuidv4() })
     await this.groupService.addUser(groupCreated.id, requestFound.userSend)
     await this.groupService.addUser(groupCreated.id, requestFound.userReceive)
 
