@@ -1,4 +1,5 @@
-import { WebSocketGateway } from "@nestjs/websockets"
+import { UseGuards } from "@nestjs/common"
+import { WebSocketGateway, WsException } from "@nestjs/websockets"
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -6,6 +7,8 @@ import {
   SubscribeMessage,
 } from "@nestjs/websockets"
 import { Server, Socket } from "socket.io"
+import { JwtService } from "@nestjs/jwt"
+import { jwtConstants } from "src/auth/constants"
 @WebSocketGateway({
   cors: {
     origin: "http://localhost:4200",
@@ -14,14 +17,61 @@ import { Server, Socket } from "socket.io"
   },
 })
 export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  constructor(private jwtService: JwtService) {}
+
+  usersOnline = []
+
   @WebSocketServer()
   server: Server
 
-  handleConnection(client: Socket, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: any[]) {
+    const token = client.handshake.headers.cookie?.split("=")[1]
+
+    if (!token) {
+      return console.error("error")
+    }
+    try {
+      const { sub } = await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      })
+
+      if (!this.usersOnline.includes(sub)) {
+        this.usersOnline.push(sub)
+      }
+
+      client.join("default")
+
+      this.server.to("default").emit("users", this.usersOnline.toString())
+    } catch {
+      return console.error("error")
+    }
+
     return client.id
   }
 
-  handleDisconnect(client: Socket) {
+  async handleDisconnect(client: Socket) {
+    const token = client.handshake.headers.cookie?.split("=")[1]
+
+    if (!token) {
+      return console.error("error")
+    }
+    try {
+      const { sub } = await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      })
+
+      client.leave("default")
+      this.usersOnline = this.usersOnline.filter((id) => id !== sub)
+
+      if (this.usersOnline.length === 0) {
+        this.server.to("default").emit("users", [])
+      } else {
+        this.server.to("default").emit("users", this.usersOnline.toString())
+      }
+    } catch {
+      return console.error("error")
+    }
+
     return client.id
   }
 
@@ -53,7 +103,9 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage("leave")
   endGroup(client: Socket, groupId: number) {
-    client.leave(`group_${groupId.toString()}`)
+    if (groupId) {
+      client.leave(`group_${groupId.toString()}`)
+    }
     return `leaved group id: ${groupId}`
   }
 }
