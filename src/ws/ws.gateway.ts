@@ -75,6 +75,16 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return client.id
   }
 
+  @SubscribeMessage("connected")
+  async openSession(client: Socket) {
+    return this.handleConnection(client)
+  }
+
+  @SubscribeMessage("close")
+  async closeSession(client: Socket) {
+    return this.handleDisconnect(client)
+  }
+
   @SubscribeMessage("join")
   joinGroup(client: Socket, groupId: number) {
     client.join(`group_${groupId.toString()}`)
