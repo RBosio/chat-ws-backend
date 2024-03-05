@@ -67,6 +67,27 @@ export class FriendRequestController {
     return this.friendRequestService.getFriendRequests(+userId)
   }
 
+  @Get("waiting/send/:userId")
+  @ApiOperation({ summary: "find friend requests waiting sended" })
+  @ApiResponse({
+    status: 200,
+    description: "get friend requests waiting sended",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "unauthorized",
+  })
+  @ApiParam({
+    name: "userId",
+    type: "number",
+    example: 1,
+  })
+  getFriendRequestsSended(
+    @Param("userId") userId: string,
+  ): Promise<FriendRequest[]> {
+    return this.friendRequestService.getFriendRequestsSended(+userId)
+  }
+
   @Get("accepted/:userId")
   @ApiOperation({ summary: "find friend requests accepted" })
   @ApiResponse({
